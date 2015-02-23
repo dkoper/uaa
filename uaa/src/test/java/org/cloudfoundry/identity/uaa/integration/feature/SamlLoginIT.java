@@ -1,5 +1,5 @@
 /*******************************************************************************
- *     Cloud Foundry 
+ *     Cloud Foundry
  *     Copyright (c) [2009-2014] Pivotal Software, Inc. All Rights Reserved.
  *
  *     This product is licensed to you under the Apache License, Version 2.0 (the "License").
@@ -62,6 +62,7 @@ public class SamlLoginIT {
         webDriver.findElement(By.xpath("//a[text()='Okta Preview 2']"));
         webDriver.findElement(By.xpath("//a[text()='Log in with OpenAM']"));
         webDriver.findElement(By.xpath("//a[text()='Log in with vCenter SSO']"));
+        webDriver.findElement(By.xpath("//a[text()='Log in with Simple SAML PHP']"));
         webDriver.findElement(By.xpath("//input[@value='Sign in']"));
         Assert.assertEquals(3, webDriver.findElements(By.xpath("//input")).size());
     }

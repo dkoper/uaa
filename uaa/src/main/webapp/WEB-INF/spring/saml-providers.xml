@@ -99,10 +99,16 @@
             and presents SP metadata there -->
         <bean id="metadataDisplayFilter" class="org.springframework.security.saml.metadata.MetadataDisplayFilter" />
 
-        <bean id="metadata" class="org.springframework.security.saml.metadata.CachingMetadataManager">
-            <constructor-arg>
-                <bean factory-bean="metaDataProviders" factory-method="getIdentityProviders"/>
-            </constructor-arg>
+        <!--<bean id="metadata" class="org.springframework.security.saml.metadata.CachingMetadataManager">-->
+            <!--<constructor-arg>-->
+                <!--<bean factory-bean="metaDataProviders" factory-method="getIdentityProviders"/>-->
+            <!--</constructor-arg>-->
+        <!--</bean>-->
+        <bean id="metadata" class="org.cloudfoundry.identity.uaa.login.saml.ZoneAwareMetadataManager" depends-on="idpBootstrap">
+            <constructor-arg name="providerDao" ref="identityProviderProvisioning"/>
+            <constructor-arg name="zoneDao" ref="identityZoneProvisioning"/>
+            <constructor-arg name="configurator" ref="metaDataProviders"/>
+            <constructor-arg name="keyManager" ref="keyManager"/>
         </bean>
 
         <bean name="metadataFetchingHttpClientTimer" class="java.util.Timer">

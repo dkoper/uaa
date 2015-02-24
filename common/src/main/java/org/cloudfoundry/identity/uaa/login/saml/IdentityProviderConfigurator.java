@@ -18,6 +18,7 @@ import org.apache.http.client.utils.URIBuilder;
 import org.cloudfoundry.identity.uaa.login.ConfigMetadataProvider;
 import org.cloudfoundry.identity.uaa.login.ssl.FixedHttpMetaDataProvider;
 import org.cloudfoundry.identity.uaa.login.util.FileLocator;
+import org.cloudfoundry.identity.uaa.zone.IdentityZone;
 import org.opensaml.saml2.metadata.provider.FilesystemMetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.xml.parse.BasicParserPool;
@@ -218,6 +219,7 @@ public class IdentityProviderConfigurator {
             String socketFactoryClassName = (String)saml.get("socketFactoryClassName");
             String linkText = (String)((Map)entry.getValue()).get("linkText");
             String iconUrl  = (String)((Map)entry.getValue()).get("iconUrl");
+            String zoneId  = (String)((Map)entry.getValue()).get("zoneId");
             IdentityProviderDefinition def = new IdentityProviderDefinition();
             if (alias==null) {
                 throw new IllegalArgumentException("Invalid IDP - alias must not be null ["+metaDataLocation+"]");
@@ -234,6 +236,7 @@ public class IdentityProviderConfigurator {
             def.setSocketFactoryClassName(socketFactoryClassName);
             def.setLinkText(linkText);
             def.setIconUrl(iconUrl);
+            def.setZoneId(StringUtils.hasText(zoneId) ? zoneId : IdentityZone.getUaa().getId());
             identityProviders.add(def);
         }
     }

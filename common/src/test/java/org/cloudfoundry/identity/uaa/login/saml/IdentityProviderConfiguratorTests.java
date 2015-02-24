@@ -93,7 +93,7 @@ public class IdentityProviderConfiguratorTests {
     public void setUp() throws Exception {
         conf = new IdentityProviderConfigurator();
         parseYaml(sampleYaml);
-        singleAdd = new IdentityProviderDefinition("file:///sample-metaDataLocation.xml", singleAddAlias,"sample-nameID",1,true,true,"sample-link-test","sample-icon-url");
+        singleAdd = new IdentityProviderDefinition("file:///sample-metaDataLocation.xml", singleAddAlias,"sample-nameID",1,true,true,"sample-link-test","sample-icon-url","uaa");
     }
 
     private void parseYaml(String sampleYaml) {

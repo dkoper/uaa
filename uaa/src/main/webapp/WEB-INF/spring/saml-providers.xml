@@ -109,6 +109,7 @@
             <constructor-arg name="zoneDao" ref="identityZoneProvisioning"/>
             <constructor-arg name="configurator" ref="metaDataProviders"/>
             <constructor-arg name="keyManager" ref="keyManager"/>
+            <property name="refreshCheckInterval" value="${login.saml.metadataRefreshInterval:120000}"/>
         </bean>
 
         <bean name="metadataFetchingHttpClientTimer" class="java.util.Timer">

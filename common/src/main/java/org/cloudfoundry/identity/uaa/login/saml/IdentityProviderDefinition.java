@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.cloudfoundry.identity.uaa.login.saml;
 
-import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.cloudfoundry.identity.uaa.login.util.FileLocator;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
@@ -33,6 +32,7 @@ public class IdentityProviderDefinition {
 
     private String metaDataLocation;
     private String idpEntityAlias;
+    private String zoneId;
     private String nameID;
     private int assertionConsumerIndex;
     private boolean metadataTrustCheck;
@@ -43,7 +43,7 @@ public class IdentityProviderDefinition {
 
     public IdentityProviderDefinition() {}
 
-    public IdentityProviderDefinition(String metaDataLocation, String idpEntityAlias, String nameID, int assertionConsumerIndex, boolean metadataTrustCheck, boolean showSamlLink, String linkText, String iconUrl) {
+    public IdentityProviderDefinition(String metaDataLocation, String idpEntityAlias, String nameID, int assertionConsumerIndex, boolean metadataTrustCheck, boolean showSamlLink, String linkText, String iconUrl, String zoneId) {
         this.metaDataLocation = metaDataLocation;
         this.idpEntityAlias = idpEntityAlias;
         this.nameID = nameID;
@@ -52,6 +52,7 @@ public class IdentityProviderDefinition {
         this.showSamlLink = showSamlLink;
         this.linkText = linkText;
         this.iconUrl = iconUrl;
+        this.zoneId = zoneId;
     }
 
     @JsonIgnore
@@ -174,8 +175,16 @@ public class IdentityProviderDefinition {
         this.iconUrl = iconUrl;
     }
 
+    public String getZoneId() {
+        return zoneId;
+    }
+
+    public void setZoneId(String zoneId) {
+        this.zoneId = zoneId;
+    }
+
     public IdentityProviderDefinition clone() {
-        return new IdentityProviderDefinition(metaDataLocation, idpEntityAlias, nameID, assertionConsumerIndex, metadataTrustCheck, showSamlLink, linkText, iconUrl);
+        return new IdentityProviderDefinition(metaDataLocation, idpEntityAlias, nameID, assertionConsumerIndex, metadataTrustCheck, showSamlLink, linkText, iconUrl, zoneId);
     }
 
     @Override
@@ -193,6 +202,7 @@ public class IdentityProviderDefinition {
         if (linkText != null ? !linkText.equals(that.linkText) : that.linkText != null) return false;
         if (!metaDataLocation.equals(that.metaDataLocation)) return false;
         if (nameID != null ? !nameID.equals(that.nameID) : that.nameID != null) return false;
+        if (zoneId != null ? !zoneId.equals(that.zoneId) : that.zoneId != null) return false;
 
         return true;
     }
@@ -207,6 +217,7 @@ public class IdentityProviderDefinition {
         result = 31 * result + (showSamlLink ? 1 : 0);
         result = 31 * result + (linkText != null ? linkText.hashCode() : 0);
         result = 31 * result + (iconUrl != null ? iconUrl.hashCode() : 0);
+        result = 31 * result + (zoneId != null ? zoneId.hashCode() : 0);
         return result;
     }
 
@@ -222,6 +233,7 @@ public class IdentityProviderDefinition {
             ", socketFactoryClassName='" + socketFactoryClassName + '\'' +
             ", linkText='" + linkText + '\'' +
             ", iconUrl='" + iconUrl + '\'' +
+            ", zoneId='" + zoneId + '\'' +
             '}';
     }
 }

@@ -19,7 +19,9 @@ import static org.junit.Assert.assertThat;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.TEXT_HTML_VALUE;
 import org.cloudfoundry.identity.uaa.login.test.LoginServerClassRunner;
+import org.hamcrest.Matchers;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +33,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.client.test.TestAccounts;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.client.RestOperations;
 
@@ -49,6 +52,9 @@ public class SamlLoginIT {
 
     @Value("${integration.test.base_url}")
     String baseUrl;
+
+    @Autowired
+    TestAccounts testAccounts;
 
     @Test
     public void testSamlVariations() throws Exception {
@@ -95,5 +101,19 @@ public class SamlLoginIT {
             new HttpEntity<>(defaultHeaders),
             Void.class);
         assertThat(defaultResponseEntity.getHeaders().get("Content-Type").get(0), containsString(TEXT_HTML_VALUE));
+    }
+
+    @Test
+    public void testSimpleSamlPhpLogin() {
+        webDriver.get(baseUrl + "/logout.do");
+        webDriver.get(baseUrl + "/login");
+        Assert.assertEquals("Cloud Foundry", webDriver.getTitle());
+        webDriver.findElement(By.xpath("//a[text()='Log in with Simple SAML PHP']")).click();
+        webDriver.findElement(By.xpath("//h2[contains(text(), 'Enter your username and password')]"));
+        webDriver.findElement(By.name("username")).sendKeys(testAccounts.getUserName());
+        webDriver.findElement(By.name("password")).sendKeys(testAccounts.getPassword());
+        webDriver.findElement(By.xpath("//input[@value='Login']")).click();
+        assertThat(webDriver.findElement(By.cssSelector("h1")).getText(), Matchers.containsString("Where to?"));
+
     }
 }

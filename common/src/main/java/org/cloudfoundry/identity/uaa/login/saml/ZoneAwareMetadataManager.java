@@ -28,17 +28,16 @@ import org.opensaml.saml2.metadata.RoleDescriptor;
 import org.opensaml.saml2.metadata.provider.MetadataFilter;
 import org.opensaml.saml2.metadata.provider.MetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
-import org.opensaml.saml2.metadata.provider.ObservableMetadataProvider;
 import org.opensaml.xml.XMLObject;
 import org.opensaml.xml.security.x509.PKIXValidationInformationResolver;
 import org.opensaml.xml.signature.SignatureTrustEngine;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.saml.key.KeyManager;
+import org.springframework.security.saml.metadata.CachingMetadataManager;
 import org.springframework.security.saml.metadata.ExtendedMetadata;
 import org.springframework.security.saml.metadata.ExtendedMetadataDelegate;
 import org.springframework.security.saml.metadata.ExtendedMetadataProvider;
-import org.springframework.security.saml.metadata.MetadataManager;
 import org.springframework.security.saml.trust.httpclient.TLSProtocolConfigurer;
 
 import javax.xml.namespace.QName;
@@ -47,7 +46,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class ZoneAwareMetadataManager extends MetadataManager implements ExtendedMetadataProvider, InitializingBean, DisposableBean {
+public class ZoneAwareMetadataManager extends CachingMetadataManager implements ExtendedMetadataProvider, InitializingBean, DisposableBean {
 
     private static final Log logger = LogFactory.getLog(ZoneAwareMetadataManager.class);
     private IdentityProviderProvisioning providerDao;
@@ -74,7 +73,6 @@ public class ZoneAwareMetadataManager extends MetadataManager implements Extende
                 if (Origin.SAML.equals(provider.getType())) {
                     try {
                         definitions.add(JsonUtils.readValue(provider.getConfig(), IdentityProviderDefinition.class));
-
                     } catch (JsonUtils.JsonUtilException x) {
                         logger.error("Unable to load provider:"+provider, x);
                     }
